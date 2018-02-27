@@ -4,20 +4,16 @@
 
 function printtab(tab)
     local function buildtab(tab)
-        local str = '{'
-        for i = 1, #tab do
-            if type(tab[i]) == "table" then
-                str = str .. buildtab(tab[i])
+        local temp = {}
+        for k,v in pairs(tab) do
+            if type(v) == "table" then
+              temp[#temp+1] = buildtab(v)
             else 
-              str = str .. tostring(tab[i])
-            end
-            if i < #tab then
-                str = str ..', '
+              temp[#temp+1] = tostring(v)
             end
         end
-        return str..'}'
+        return '{'..table.concat(temp, ', ')..'}'
     end
-
     local str = buildtab(tab)
     print(str)
 end

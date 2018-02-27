@@ -7,8 +7,8 @@ function map(tab, fun)
   if type(tab) ~= "table" then 
     return tmp 
   end 
-  for i=1, #tab do
-    tmp[i] = fun(tab[i])
+  for k,v in pairs(tab) do
+    tmp[k] = fun(v)
   end
   return tmp
 end
