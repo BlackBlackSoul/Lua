@@ -1,12 +1,14 @@
 chain = function (...)
   return function (t) 
-    while t.j > #t[t.i] do 
+    while t.j > #t[1][t.i] do 
       t.i = t.i+1; t.j = 1 
-      if t.i > #t then return nil end
+      if t.i > #t[1] then 
+        return nil
+      end
     end
     t.j = t.j+1
-    return t[t.i][t.j-1]
-  end, {..., i=1, j=1}, 0
+    return t[1][t.i][t.j-1]
+  end, {{...}, i=1, j=1}, 0
 end
 
 local test = require("frameworks.u-test")
