@@ -1,5 +1,4 @@
-chain = function (...)
-  return function (t) 
+ichain = function (t) 
     while t.j > #t[1][t.i] do 
       t.i = t.i+1; t.j = 1 
       if t.i > #t[1] then 
@@ -8,7 +7,10 @@ chain = function (...)
     end
     t.j = t.j+1
     return t[1][t.i][t.j-1]
-  end, {{...}, i=1, j=1}, 0
+  end
+
+chain = function (...)
+  return ichain, {{...}, i=1, j=1}, 0
 end
 
 local test = require("frameworks.u-test")
@@ -23,6 +25,7 @@ test.continous = function ()
     test.equal(x, t[it])
     it = it + 1
   end
+  test.equal(it-1, #t)
 end
 
 
@@ -33,6 +36,7 @@ test.emptySeqs = function ()
     test.equal(x, t[it])
     it = it + 1
   end
+  test.equal(it-1, #t)
 end
 
 test.emptySeqsMultiple = function ()
@@ -42,4 +46,5 @@ test.emptySeqsMultiple = function ()
     test.equal(x, t[it])
     it = it + 1
   end
+  test.equal(it-1, #t)
 end
