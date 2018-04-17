@@ -102,7 +102,6 @@ function Frac.toFrac(d)
   if getmetatable(d) == Frac.mt then return d end
   local sgn = d/abs(d)
   d = abs(d)
-  local num1; local num2
   local num1, num2 = modf(d, d+100)
   local rem = string.sub(tostring(num2), 3)
   num1 = num1 * (10^(#rem))

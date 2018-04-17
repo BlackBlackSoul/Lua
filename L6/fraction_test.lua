@@ -19,4 +19,4 @@ print(f1^2)
 
 print(fractions.toFloat(f1))
 
-print(fractions.toFrac(0.123))
+print(fractions.toFrac(120.123))
