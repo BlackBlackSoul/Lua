@@ -2,8 +2,8 @@ local CVector = {}
 
 local max = math.max
 local min = math.min
-local function red(str) return "\27[1;31m"..str.."\27[0m" end
-local properKey
+local red -- color red
+local properKey -- check if key is in bounds, true if is, false + error otherwise
 
 CVector.__index = function (vector, key)
   if type(key) == "number" then 
@@ -21,13 +21,15 @@ CVector.__newindex = function(vector, key, val)
   end
 end
 
-CVector.__ipairs = function (vector)
-  i = 0
-  return function()
-    i = i+1
-    if i> vector.n then return nil
-    else return i-1, vector.container[i] end 
-  end
+
+local function ipairs_iter(t) 
+    t.i = t.i + 1
+    if t.i > t.val.n then return nil
+    else return t.i-1, t.val.container[t.i] end
+end
+  
+CVector.__ipairs = function (...)
+  return ipairs_iter, {val = ..., i=0}, 0
 end
 
 
@@ -136,6 +138,8 @@ end
 
 --------------------------------------------------------------------------------------
 -- INTERNAL
+red = function(str) return "\27[1;31m"..str.."\27[0m" end
+
 properKey = function(vector, key) 
   if key < 0 or key >= vector:size() then
       -- print(debug.traceback())

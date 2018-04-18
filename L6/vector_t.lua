@@ -4,25 +4,29 @@ Vector.__index = Vector
 local max = math.max
 local sqrt = math.sqrt
 
-Vector.__pairs = function (v)
-  local i = 0
-  return function()
-    i = i + 1
-    if i <= v.dimension then  return i, v[i]
-    else return nil end
-  end
+local fixArgs -- makes <vector, vector> from vector, number pair
+
+local function pairs_iter(t)
+  t.i = t.i + 1
+  if t.i <= t.v.dimension then  return t.i, t.v[t.i]
+  else return nil end
 end
 
-Vector.__ipairs = function (v)
-  local i = 0
-  return function()
-    i = i + 1
-    if i <= v.dimension then
-      local u = Vector.newZero(v.dimension)
-      u[i] = 1
-      return u, v[i]
+Vector.__pairs = function (...)
+  return pairs_iter, {v = ..., i = 0}, 0
+end
+
+local function ipairs_iter(t)
+  t.i = t.i + 1
+    if t.i <= t.v.dimension then
+      local u = Vector.newZero(t.v.dimension)
+      u[t.i] = 1
+      return u, t.v[t.i]
     else return nil end
-  end
+end
+
+Vector.__ipairs = function (...)
+  return ipairs_iter, {v = ..., i = 0}, 0
 end
 
 Vector.__unm = function (v)
@@ -31,8 +35,7 @@ Vector.__unm = function (v)
 end
 
 Vector.__add = function (v, w)
-  if type(v) == "number" then v, w = w, v end
-  if type(w) == "number" then w = Vector.expand(w, v.dimension) end
+  v, w = fixArgs(v, w)
   local u = Vector.newZero(max(v.dimension, w.dimension))
   for i=1, v.dimension do u[i] = u[i] + v[i] end
   for i=1, w.dimension do u[i] = u[i] + w[i] end
@@ -44,8 +47,7 @@ Vector.__sub = function (v, w)
 end
 
 Vector.__mul = function (v, w) -- scalar and dot product at once
-  if type(v) == "number" then v, w = w, v end
-  if type(w) == "number" then w = Vector.expand(w, v.dimension) end
+  v, w = fixArgs(v,w)
   local u = Vector.newUnit( max(v.dimension, w.dimension))
   for i=1, v.dimension do u[i] = u[i] * v[i] end
   for i=1, w.dimension do u[i] = u[i] * w[i] end
@@ -53,7 +55,7 @@ Vector.__mul = function (v, w) -- scalar and dot product at once
 end
 
 Vector.__div = function (v, w)
-  if type(v) == "number" then v = Vector.expand(v, w.dimension) end
+  if type(v) == "number" then error("Cannot divide scalar by vector") end
   if type(w) == "number" then w = Vector.expand(w, v.dimension) end
   for i, val in pairs(w) do
     if val == 0 then error("Cannot divide by zero") end
@@ -79,7 +81,7 @@ Vector.__concat = function (v, w)
 end
 
 Vector.__eq = function (v,w) 
-  if getmetatable(v) ~= getmetatable(w) or
+  if not Vector.isVector(v) or not Vector.isVector(w) or
       v.dimension ~= w.dimension then return false end
   for i=1, v.dimension do if v[i] ~= w [i] then return false end end
   return true
@@ -87,7 +89,7 @@ end
 
 function Vector.new(o)
   local r = {}
-  if getmetatable(o) == Vector then 
+  if Vector.isVector(o) then 
     for i, val in pairs(o) do r[i] = val end
     r.dimension = o.dimension
   else 
@@ -95,6 +97,16 @@ function Vector.new(o)
     for i,val in ipairs(o) do r[i] = val end
   end
   return setmetatable(r, Vector)
+end
+
+function Vector.isVector(v) 
+  return getmetatable(v) == Vector
+end
+
+fixArgs = function (v, w) 
+  if type(v) == "number" then v, w = w, v end
+  if type(w) == "number" then w = Vector.expand(w, v.dimension) end
+  return v, w
 end
 
 function Vector.newZero(dim)
