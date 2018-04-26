@@ -37,6 +37,8 @@ void loadConfig(lua_State *L, const char *fname) {
 
 void loadPlayer(lua_State *L, Character *player) {
 
+    loadConfig(L, "player_cfg.lua");
+
     enum TYPE {
         STR, NUM, INT, BOOL
     };
@@ -96,8 +98,6 @@ int main() {
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
 
-    // load config only once on the beggining
-    loadConfig(L, "player_cfg.lua");
 
     Character player;
     loadPlayer(L, &player);
@@ -114,12 +114,14 @@ int main() {
     std::cout << "Set LVL to 80...\n";
     lua_pushinteger(L, 80); // push LVL 45
     lua_setglobal(L, "LVL");
+    loadPlayer(L, &player);
     lua_pushstring(L, "mighty stick");
     lua_setglobal(L, "staffName");
-    lua_pushboolean(L, true);
-    lua_setglobal(L, "langElves");
-    loadPlayer(L, &player);
+    lua_getglobal(L, "staffName");
+    player._staffName = lua_tostring(L, -1);
+    lua_pop(L, -1);
     displayPlayer(&player);
+    stackDump(L);
 
     lua_close(L);
     return 0;
