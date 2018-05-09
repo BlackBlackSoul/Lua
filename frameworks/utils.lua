@@ -147,6 +147,29 @@ local function display(...)
     for i = 1, t.n do print(mobdebug.line(t[i])) end
 end
 
+local function deepCopy(t) -- deep-copy a table
+    if type(t) ~= "table" then return t end
+    local meta = getmetatable(t)
+    local target = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            target[k] = deepCopy(v)
+        else
+            target[k] = v
+        end
+    end
+    setmetatable(target, meta)
+    return target
+end
+
+local function shallowCopy(t) -- shallow-copy a table
+    if type(t) ~= "table" then return t end
+    local meta = getmetatable(t)
+    local target = {}
+    for k, v in pairs(t) do target[k] = v end
+    setmetatable(target, meta)
+    return target
+end
 
 --
 utils.reloadMod = reloadMod
@@ -154,4 +177,6 @@ utils.tabTostring = tabTostring
 utils.display = display
 utils.tabsEqual = tabsEqual
 utils.typecheck = typecheck
+utils.deepCopy = deepCopy
+utils.shallowCopy = shallowCopy
 return utils

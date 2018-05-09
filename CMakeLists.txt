@@ -24,3 +24,4 @@ endif ()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AIrand.lua AIrand.lua COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AI1.lua AI1.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/frameworks/utils.lua frameworks/utils.lua COPYONLY)
