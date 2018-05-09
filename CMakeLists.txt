@@ -3,7 +3,8 @@ project(Lua)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Lua L7/config.cpp)
+set(FOLDER L8)
+add_executable(Lua ${FOLDER}/tictactoe.cpp)
 
 find_package(Lua 5.3 REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
@@ -14,11 +15,12 @@ if (${LUA_VERSION_MINOR} LESS 3)
     message(ERROR "LUA VERSION BELOW 5.3... !")
 endif ()
 
-if(LUA_FOUND)
+if (LUA_FOUND)
     message("Loaded Lua: ${LUA_VERSION_STRING}")
-else()
+else ()
     message("Lua libraries: ${LUA_LIBRARIES}")
     message("Lua include dir: ${LUA_INCLUDE_DIR}")
-endif()
+endif ()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/L7/player_cfg.lua player_cfg.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AIrand.lua AIrand.lua COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AI1.lua AI1.lua COPYONLY)

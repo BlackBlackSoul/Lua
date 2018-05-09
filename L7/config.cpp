@@ -25,7 +25,6 @@ void error(lua_State *L, const char *fmt, ...) {
     va_start(argp, fmt);
     vfprintf(stderr, fmt, argp);
     va_end(argp);
-    stackDump(L, std::cerr);
     lua_close(L);
     exit(1);
 }
