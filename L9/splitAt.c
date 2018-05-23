@@ -2,14 +2,16 @@
 // Created by Tooster on 23.05.2018.
 //
 
-#include "lua.h"
-#include "lauxlib.h"
+#include "lua-5.3.4/src/lua.h"
+#include "lua-5.3.4/src/lauxlib.h"
 
 static int l_splitAt(lua_State *L) {
     if (!lua_istable(L, 1))
         luaL_error(L, "First argument must be a table.");
+
     size_t n = lua_rawlen(L, 1);
-    for (int elem = 2, it = 1; elem <= lua_gettop(L); elem++) { // <= ? < ?
+    int elems = lua_gettop(L)-1; // number of splits
+    for (int elem = 2, it = 1; elem <= elems && it < n; elem++) {
         lua_newtable(L);
         int tab = lua_gettop(L); // table on stack
         lua_Integer m = lua_tointeger(L, elem); // number of elements for table

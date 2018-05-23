@@ -6,7 +6,7 @@
 local A = require 'summation'
 local B = require 'reverse'
 local C = require 'merge'
---local D = require 'splitAt'
+local D = require 'splitAt'
 
 local function ttstr(t) return "{" .. table.concat(t, ",") .. "}" end
 
@@ -14,6 +14,8 @@ local function mtstr(m) local s = {} for k, v in pairs(m) do s[#s + 1] = k .. "=
 
 local t = { 1, 2, 3, 4, 5, 6, 10 }
 print(A.summation(table.unpack(t)))
+print(A.summation(table.unpack({})))
 print(ttstr(B.reverse(t)))
+print(ttstr(B.reverse({1})))
 print(mtstr(C.merge({ apple = 7, banana = 3 }, { apple = 2, orange = 11 }, { apple = 1, banana = 12, carrot = -1 })))
---print(ttstr(D.splitAt({1,2,3,4,5,6,7,8},3,5)))
+print(ttstr(D.splitAt({1,2,3,4,5,6,7,8},3,5)))

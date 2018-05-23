@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD 11)
 set(FOLDER L9)
 add_executable(Lua ${FOLDER}/summation.c ${FOLDER}/reverse.c ${FOLDER}/merge.c ${FOLDER}/splitAt.c)
 
-find_package(Lua 5.3 REQUIRED)
+find_package(Lua 5.2 REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
 target_link_libraries(Lua ${LUA_LIBRARIES})
 
