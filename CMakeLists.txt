@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.8)
 project(Lua)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 11)
 
-set(FOLDER L8)
-add_executable(Lua ${FOLDER}/tictactoe.cpp)
+set(FOLDER L9)
+add_executable(Lua ${FOLDER}/summation.c ${FOLDER}/reverse.c ${FOLDER}/merge.c ${FOLDER}/splitAt.c)
 
 find_package(Lua 5.3 REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
@@ -22,6 +22,4 @@ else ()
     message("Lua include dir: ${LUA_INCLUDE_DIR}")
 endif ()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AIrand.lua AIrand.lua COPYONLY)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${FOLDER}/AI1.lua AI1.lua COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/frameworks/utils.lua frameworks/utils.lua COPYONLY)
